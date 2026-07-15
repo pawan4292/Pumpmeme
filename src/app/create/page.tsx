@@ -152,6 +152,9 @@ export default function CreatePage() {
           >
             Real on-chain token on Unicity testnet2. Real bonding curve. Real fee. No shortcuts.
           </motion.p>
+          <p className="text-white/30 text-sm mt-2">
+            Fixed supply: 1,000,000,000 tokens · minted onto the bonding curve, no pre-mine
+          </p>
         </div>
       </div>
 

@@ -12,6 +12,9 @@ export const GRADUATION_THRESHOLD_UCT = 500;
 // price = CURVE_SLOPE * supply  (linear bonding curve)
 export const CURVE_SLOPE = 0.000001; // UCT per token unit
 
+// Fixed total supply for every token (pump.fun-style, not creator-set)
+export const TOTAL_SUPPLY = 1_000_000_000;
+
 // Sphere testnet2 configuration (public key, not a secret)
 export const SPHERE_ORACLE_API_KEY = 'sk_ddc3cfcc001e4a28ac3fad7407f99590';
 export const SPHERE_WALLET_API_BASE_URL = 'https://wallet-api.unicity.network';
