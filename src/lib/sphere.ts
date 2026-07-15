@@ -240,6 +240,9 @@ export async function sendCreationFee(
     if (errMsg.includes('CERTIFICATION_UNCONFIRMED')) {
       return { success: false, status: 'CERTIFICATION_UNCONFIRMED' };
     }
+    if (/reject|cancel|denied|declined|closed/i.test(errMsg)) {
+      return { success: false, status: 'CANCELLED' };
+    }
     throw err;
   }
 }

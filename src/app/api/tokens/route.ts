@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAllTokens, createToken, getTradesForToken, searchTokens } from '@/lib/db';
 import { marketCap } from '@/lib/curve';
-import { GRADUATION_THRESHOLD_UCT } from '@/lib/constants';
+import { GRADUATION_THRESHOLD_UCT, TOTAL_SUPPLY } from '@/lib/constants';
 
 // GET /api/tokens — list tokens with optional search
 export async function GET(req: NextRequest) {
@@ -96,7 +96,7 @@ export async function POST(req: NextRequest) {
       symbol: symbol.toUpperCase(),
       description,
       imageUrl,
-      supply: '0',
+      supply: TOTAL_SUPPLY.toString(),
       creatorNametag,
       creatorPubkey,
       creationFeeTxId,

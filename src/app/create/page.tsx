@@ -68,6 +68,8 @@ export default function CreatePage() {
         throw new Error(
           feeResult.status === 'CERTIFICATION_UNCONFIRMED'
             ? 'Transfer may have partially completed. Please wait and try again.'
+            : feeResult.status === 'CANCELLED'
+            ? 'Payment cancelled by user.'
             : `Fee transfer failed: ${feeResult.status}`
         );
       }
