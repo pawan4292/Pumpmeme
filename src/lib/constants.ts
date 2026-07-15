@@ -22,7 +22,7 @@ export const SPHERE_NETWORK_ID = 4; // testnet2 networkId
 export const SPHERE_WALLET_URL = 'https://sphere.unicity.network';
 
 // Token decimals for UCT
-export const UCT_DECIMALS = 8;
+export const UCT_DECIMALS = 18;
 
 // App metadata
 export const APP_NAME = 'PumpMeme';

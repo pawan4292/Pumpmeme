@@ -199,7 +199,7 @@ export async function getUCTBalance(): Promise<number> {
   if (!uct) return 0;
 
   const raw = Number(uct.totalAmount);
-  return raw / Math.pow(10, UCT_DECIMALS);
+  return raw / Math.pow(10, uct.decimals); // use real decimals from SDK, not the hardcoded constant
 }
 
 // ─── Transfers (real SDK calls) ───────────────────────────────────────────────
