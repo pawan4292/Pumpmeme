@@ -213,6 +213,13 @@ export default function ExplorePage() {
                   🤖 View Agents
                 </motion.button>
               </Link>
+              <motion.button
+                onClick={() => document.getElementById('token-grid')?.scrollIntoView({ behavior: 'smooth' })}
+                whileHover={{ scale: 1.03 }}
+                className="flex items-center gap-2 px-6 py-3 rounded-xl font-bold border border-white/10 text-white/70 hover:bg-white/5 transition-colors"
+              >
+                💰 Explore Tokens
+              </motion.button>
             </motion.div>
           </motion.div>
 
@@ -239,8 +246,8 @@ export default function ExplorePage() {
         {/* Ticker tape */}
         {tickerTokens.length > 0 && (
           <div className="relative border-y border-orange-500/10 py-2 overflow-hidden bg-orange-500/5">
-            <div className="ticker-content flex gap-8 whitespace-nowrap">
-              {[...tickerTokens, ...tickerTokens].map((t, i) => (
+            <div className="ticker-content flex flex-nowrap gap-8 whitespace-nowrap overflow-x-hidden">
+              {tickerTokens.map((t, i) => (
                 <div key={`${t.id}-${i}`} className="flex items-center gap-2 flex-shrink-0">
                   <span className="text-orange-400 font-mono font-bold text-sm">${t.symbol}</span>
                   <span className="text-white/50 text-xs">
@@ -255,7 +262,7 @@ export default function ExplorePage() {
       </div>
 
       {/* MAIN CONTENT */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+     <div id="token-grid" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Search + tabs */}
         <div className="flex flex-col md:flex-row gap-4 mb-8">
           {/* Search */}
