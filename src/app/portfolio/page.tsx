@@ -102,7 +102,9 @@ export default function PortfolioPage() {
       if (c) loadPortfolio();
     };
     checkWallet();
-    const interval = setInterval(checkWallet, 1000);
+    const interval = setInterval(() => {
+      if (!isWalletConnected()) setConnected(false);
+    }, 3000);
     return () => clearInterval(interval);
   }, []);
 
@@ -307,6 +309,7 @@ export default function PortfolioPage() {
                         <div className="text-white text-sm font-mono">{(token.marketCap ?? 0).toFixed(2)} UCT</div>
                         <div className="text-white/30 text-xs">market cap</div>
                       </div>
+                      <span className="text-xs bg-green-500/10 text-green-400 px-2 py-1 rounded-lg font-semibold">Trade</span>
                       <ExternalLink size={12} className="text-white/20" />
                     </div>
                   </div>

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAllTokens, createToken, getTradesForToken, searchTokens } from '@/lib/db';
+import { getAllTokens, createToken, getTradesForToken, searchTokens, get24hVolume } from '@/lib/db';
 import { marketCap } from '@/lib/curve';
 import { GRADUATION_THRESHOLD_UCT, TOTAL_SUPPLY } from '@/lib/constants';
 
@@ -31,11 +31,13 @@ export async function GET(req: NextRequest) {
           recentTrades.length > 0 ? parseFloat(recentTrades[0].price) : 0;
         const supply = parseFloat(token.supply);
         const mc = marketCap(supply);
+        const volume24h = await get24hVolume(token.id);
 
         return {
           ...token,
           latestPrice,
           marketCap: mc,
+          volume24h,
           graduationProgress: Math.min(100, (mc / GRADUATION_THRESHOLD_UCT) * 100),
         };
       })
