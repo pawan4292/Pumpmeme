@@ -243,22 +243,7 @@ export default function ExplorePage() {
           </motion.div>
         </div>
 
-        {/* Ticker tape */}
-        {tickerTokens.length > 0 && (
-          <div className="relative border-y border-orange-500/10 py-2 overflow-hidden bg-orange-500/5">
-            <div className="ticker-content flex flex-nowrap gap-8 whitespace-nowrap overflow-x-hidden">
-              {tickerTokens.map((t, i) => (
-                <div key={`${t.id}-${i}`} className="flex items-center gap-2 flex-shrink-0">
-                  <span className="text-orange-400 font-mono font-bold text-sm">${t.symbol}</span>
-                  <span className="text-white/50 text-xs">
-                    {(t.latestPrice ?? 0).toFixed(8)} UCT
-                  </span>
-                  <span className="text-white/20">·</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+        
       </div>
 
       {/* MAIN CONTENT */}
