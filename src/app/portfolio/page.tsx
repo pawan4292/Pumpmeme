@@ -334,34 +334,38 @@ export default function PortfolioPage() {
           ) : (
             <div className="divide-y divide-white/5 max-h-96 overflow-y-auto">
               {myTrades.map((trade) => (
-                <div key={trade.id} className="flex items-center justify-between px-5 py-3">
-                  <div className="flex items-center gap-3">
-                    <span className={`text-sm font-bold ${trade.type === 'buy' ? 'text-green-400' : 'text-red-400'}`}>
-                      {trade.type === 'buy' ? '▲' : '▼'}
-                    </span>
-                    <div>
-                      <div className="text-white text-sm">
-                        {trade.type === 'buy' ? 'Bought' : 'Sold'}{' '}
-                        <span className="text-orange-400 font-mono">${trade.tokenSymbol ?? '???'}</span>
-                      </div>
-                      <div className="text-white/30 text-xs font-mono">
-                        {parseFloat(trade.amount).toFixed(0)} tokens
-                      </div>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-white font-mono text-sm">{parseFloat(trade.totalCost).toFixed(4)} UCT</div>
-                    <div className="text-white/30 text-xs">
-                      {new Date(trade.timestamp).toLocaleDateString()}
-                    </div>
-                    {trade.txId && (
-                      <div className="text-orange-400/40 text-xs font-mono truncate max-w-24">
-                        {trade.txId.slice(0, 12)}...
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
+  <div key={trade.id} className="flex items-center justify-between px-5 py-3">
+    <div className="flex items-center gap-3">
+      <span className={`text-sm font-bold ${trade.type === 'buy' ? 'text-green-400' : 'text-red-400'}`}>
+        {trade.type === 'buy' ? '▲' : '▼'}
+      </span>
+      <div>
+        <div className="text-white text-sm">
+          {trade.type === 'buy' ? 'Bought' : 'Sold'}{' '}
+          <span className="text-orange-400 font-mono">${trade.tokenSymbol ?? '???'}</span>
+        </div>
+        <div className="text-white/30 text-xs font-mono">
+          {parseFloat(trade.amount).toFixed(0)} tokens
+        </div>
+      </div>
+    </div>
+    <div className="flex items-center gap-3">
+      <div className="text-right">
+        <div className="text-white font-mono text-sm">{parseFloat(trade.totalCost).toFixed(4)} UCT</div>
+        <div className="text-white/30 text-xs">
+          {new Date(trade.timestamp).toLocaleDateString()}
+        </div>
+        {trade.txId && (
+          <div className="text-orange-400/40 text-xs font-mono truncate max-w-24">
+            {trade.txId.slice(0, 12)}...
+          </div>
+        )}
+      </div>
+      <Link href={`/token/${trade.tokenId}`} className="text-xs bg-green-500/10 text-green-400 px-2 py-1 rounded-lg font-semibold hover:bg-green-500/20 transition-colors whitespace-nowrap">Buy</Link>
+      <Link href={`/token/${trade.tokenId}`} className="text-xs bg-red-500/10 text-red-400 px-2 py-1 rounded-lg font-semibold hover:bg-red-500/20 transition-colors whitespace-nowrap">Sell</Link>
+    </div>
+  </div>
+))}
             </div>
           )}
         </div>
