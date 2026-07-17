@@ -98,7 +98,7 @@ export async function POST(req: NextRequest) {
       symbol: symbol.toUpperCase(),
       description,
       imageUrl,
-      supply: TOTAL_SUPPLY.toString(),
+      supply: '0',
       creatorNametag,
       creatorPubkey,
       creationFeeTxId,
