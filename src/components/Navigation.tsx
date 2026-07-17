@@ -57,11 +57,13 @@ export default function Navigation() {
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2 group">
               <motion.div
-                animate={{ rotate: [0, -5, 5, -5, 0] }}
-                transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 4 }}
-                className="relative w-8 h-8"
+                animate={{ rotate: [0, -8, 8, -8, 0] }}
+                transition={{ duration: 0.6, repeat: Infinity, repeatDelay: 3.5 }}
+                whileHover={{ scale: 1.1 }}
+                className="relative w-10 h-10 flex-shrink-0"
+                style={{ filter: 'drop-shadow(0 0 8px rgba(249,115,22,0.5))' }}
               >
-                <Image src="/logo.png" alt="PumpMeme" fill className="object-contain" />
+                <Image src="/logo.png" alt="PumpMeme" fill priority className="object-contain" />
               </motion.div>
               <div>
                 <div className="gradient-text font-black text-xl leading-none">PumpMeme</div>
