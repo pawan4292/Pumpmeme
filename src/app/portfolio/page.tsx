@@ -347,17 +347,17 @@ export default function PortfolioPage() {
             <div className="divide-y divide-white/5">
               {holdings.map((h) => (
                 <div key={h.tokenId} className="flex items-center justify-between px-5 py-3">
+                  <Link href={`/token/${h.tokenId}`}>
+                    <div>
+                      <div className="text-white font-semibold text-sm">{h.name}</div>
+                      <div className="text-orange-400 font-mono text-xs">${h.symbol}</div>
+                    </div>
+                  </Link>
                   <div className="flex items-center gap-3">
+                    <div className="text-white font-mono text-sm">{h.balance.toFixed(2)} {h.symbol}</div>
                     <Link href={`/token/${h.tokenId}`} className="text-xs bg-green-500/10 text-green-400 px-2 py-1 rounded-lg font-semibold hover:bg-green-500/20 transition-colors">Buy</Link>
                     <Link href={`/token/${h.tokenId}`} className="text-xs bg-red-500/10 text-red-400 px-2 py-1 rounded-lg font-semibold hover:bg-red-500/20 transition-colors">Sell</Link>
-                    <Link href={`/token/${h.tokenId}`}>
-                      <div>
-                        <div className="text-white font-semibold text-sm">{h.name}</div>
-                        <div className="text-orange-400 font-mono text-xs">${h.symbol}</div>
-                      </div>
-                    </Link>
                   </div>
-                  <div className="text-white font-mono text-sm">{h.balance.toFixed(2)} {h.symbol}</div>
                 </div>
               ))}
             </div>
