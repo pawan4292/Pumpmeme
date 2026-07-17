@@ -185,6 +185,14 @@ export async function getHoldersForToken(tokenId: number): Promise<typeof holder
     .orderBy(desc(holderSnapshots.snapshotAt));
 }
 
+export async function getHolderBalance(tokenId: number, pubkey: string): Promise<number> {
+  const rows = await db
+    .select({ balance: holderSnapshots.balance })
+    .from(holderSnapshots)
+    .where(and(eq(holderSnapshots.tokenId, tokenId), eq(holderSnapshots.pubkey, pubkey)));
+  return rows.reduce((sum, r) => sum + parseFloat(r.balance), 0);
+}
+
 // ─── Activity Log ─────────────────────────────────────────────────────────────
 
 export async function logActivity(data: NewActivityLogEntry): Promise<void> {

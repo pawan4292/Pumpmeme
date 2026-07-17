@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Zap, TrendingUp, TrendingDown, Loader2, AlertCircle, ExternalLink } from 'lucide-react';
-import { isWalletConnected, getConnectedIdentity, sendBuyPayment, sendSellPayout } from '@/lib/sphere';
+import { isWalletConnected, getConnectedIdentity, sendBuyPayment } from '@/lib/sphere';
 import { GRADUATION_THRESHOLD_UCT } from '@/lib/constants';
 
 interface BuySellPanelProps {
@@ -38,12 +38,22 @@ export default function BuySellPanel({ token, onTrade }: BuySellPanelProps) {
   const [trading, setTrading] = useState(false);
   const [txResult, setTxResult] = useState<{ success: boolean; txId?: string; message: string } | null>(null);
   const [walletConnected, setWalletConnected] = useState(false);
+  const [holderBalance, setHolderBalance] = useState<number>(0);
 
   useEffect(() => {
     setWalletConnected(isWalletConnected());
     const interval = setInterval(() => setWalletConnected(isWalletConnected()), 1000);
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    const identity = getConnectedIdentity();
+    if (!identity || !walletConnected) { setHolderBalance(0); return; }
+    fetch(`/api/tokens/${token.id}/balance?pubkey=${identity.chainPubkey}`)
+      .then((r) => r.json())
+      .then((d) => setHolderBalance(d.balance ?? 0))
+      .catch(() => setHolderBalance(0));
+  }, [token.id, walletConnected]);
 
   const fetchQuote = useCallback(async (amt: string) => {
     const num = parseFloat(amt);
@@ -83,21 +93,37 @@ export default function BuySellPanel({ token, onTrade }: BuySellPanelProps) {
       // Treasury address for this token (where buy payments go)
       const treasuryAddress = token.treasuryAddress ?? identity.directAddress ?? '';
 
-      let sendResult;
+      let sendResult: { success: boolean; transferId?: string; status: string };
+
       if (mode === 'buy') {
         const cost = quote.uctCost ?? 0;
         sendResult = await sendBuyPayment(treasuryAddress, cost, token.symbol);
+        if (!sendResult.success) {
+          setTxResult({ success: false, message: `Transfer failed: ${sendResult.status}` });
+          return;
+        }
       } else {
+        if (parseFloat(amount) > holderBalance) {
+          setTxResult({ success: false, message: `You only hold ${holderBalance} ${token.symbol}` });
+          return;
+        }
         const payout = quote.uctPayout ?? 0;
-        sendResult = await sendSellPayout(identity.directAddress ?? identity.chainPubkey, payout, token.symbol);
-      }
-
-      if (!sendResult.success) {
-        setTxResult({
-          success: false,
-          message: `Transfer failed: ${sendResult.status}`,
+        const payoutRes = await fetch('/api/agent/payout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            tokenId: token.id,
+            recipient: identity.directAddress ?? identity.chainPubkey,
+            amountUCT: payout,
+            symbol: token.symbol,
+          }),
         });
-        return;
+        const payoutData = await payoutRes.json();
+        if (!payoutRes.ok || !payoutData.success) {
+          setTxResult({ success: false, message: 'Payout failed' });
+          return;
+        }
+        sendResult = { success: true, transferId: payoutData.txId, status: 'completed' };
       }
 
       // Record the trade in DB (only after confirmed transfer)
@@ -190,7 +216,7 @@ export default function BuySellPanel({ token, onTrade }: BuySellPanelProps) {
         <div>
           <div className="flex justify-between text-xs text-white/40 mb-2">
             <span>Amount ({token.symbol})</span>
-            <span>Token units to {mode}</span>
+            <span>{mode === 'sell' ? `You hold: ${holderBalance.toFixed(2)} ${token.symbol}` : `Token units to ${mode}`}</span>
           </div>
           <div className="relative">
             <input
