@@ -14,6 +14,7 @@ import {
   Menu,
   X,
 } from 'lucide-react';
+import Image from 'next/image';
 import WalletConnectButton from './WalletConnectButton';
 
 const NAV_ITEMS = [
@@ -58,9 +59,9 @@ export default function Navigation() {
               <motion.div
                 animate={{ rotate: [0, -5, 5, -5, 0] }}
                 transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 4 }}
-                className="text-2xl"
+                className="relative w-8 h-8"
               >
-                🚀
+                <Image src="/logo.png" alt="PumpMeme" fill className="object-contain" />
               </motion.div>
               <div>
                 <div className="gradient-text font-black text-xl leading-none">PumpMeme</div>
