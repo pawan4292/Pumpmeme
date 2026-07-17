@@ -44,6 +44,7 @@ export default function PortfolioPage() {
   const [history, setHistory] = useState<unknown[]>([]);
   const [createdTokens, setCreatedTokens] = useState<TokenFromDB[]>([]);
   const [myTrades, setMyTrades] = useState<(TradeFromDB & { tokenSymbol?: string })[]>([]);
+  const [holdings, setHoldings] = useState<{ tokenId: number; symbol: string; name: string; balance: number }[]>([]);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -87,6 +88,23 @@ export default function PortfolioPage() {
         }
         trades.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
         setMyTrades(trades.slice(0, 50));
+
+        // Build holdings: unique tokens traded, fetch live balance for each
+        const uniqueTokenIds = [...new Set(trades.map((t) => t.tokenId))];
+        const holdingsData = await Promise.all(
+          uniqueTokenIds.map(async (tokenId) => {
+            const tokenMeta = allTokens.find((t) => t.id === tokenId);
+            const balRes = await fetch(`/api/tokens/${tokenId}/balance?pubkey=${identity.chainPubkey}`);
+            const balData = balRes.ok ? await balRes.json() : { balance: 0 };
+            return {
+              tokenId,
+              symbol: tokenMeta?.symbol ?? '???',
+              name: tokenMeta?.name ?? 'Unknown',
+              balance: balData.balance ?? 0,
+            };
+          })
+        );
+        setHoldings(holdingsData.filter((h) => h.balance > 0));
       }
     } catch (err) {
       console.error('Portfolio load error:', err);
@@ -312,6 +330,29 @@ export default function PortfolioPage() {
                       <span className="text-xs bg-green-500/10 text-green-400 px-2 py-1 rounded-lg font-semibold">Trade</span>
                       <ExternalLink size={12} className="text-white/20" />
                     </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* My Holdings */}
+        {holdings.length > 0 && (
+          <div className="rounded-xl border border-white/5 mb-6 overflow-hidden" style={{ background: '#111' }}>
+            <div className="px-5 py-4 border-b border-white/5 flex items-center gap-2">
+              <Package size={16} className="text-orange-400" />
+              <h3 className="text-white font-bold">My Holdings</h3>
+            </div>
+            <div className="divide-y divide-white/5">
+              {holdings.map((h) => (
+                <Link key={h.tokenId} href={`/token/${h.tokenId}`}>
+                  <div className="flex items-center justify-between px-5 py-3 hover:bg-white/2 transition-colors cursor-pointer">
+                    <div>
+                      <div className="text-white font-semibold text-sm">{h.name}</div>
+                      <div className="text-orange-400 font-mono text-xs">${h.symbol}</div>
+                    </div>
+                    <div className="text-white font-mono text-sm">{h.balance.toFixed(2)} {h.symbol}</div>
                   </div>
                 </Link>
               ))}

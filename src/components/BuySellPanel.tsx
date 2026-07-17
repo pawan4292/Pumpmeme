@@ -148,6 +148,13 @@ export default function BuySellPanel({ token, onTrade }: BuySellPanelProps) {
         });
         setAmount('');
         setQuote(null);
+        const identity2 = getConnectedIdentity();
+        if (identity2) {
+          fetch(`/api/tokens/${token.id}/balance?pubkey=${identity2.chainPubkey}`)
+            .then((r) => r.json())
+            .then((d) => setHolderBalance(d.balance ?? 0))
+            .catch(() => {});
+        }
         onTrade?.();
       } else {
         const err = await tradeRes.json();
