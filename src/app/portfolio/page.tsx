@@ -346,15 +346,19 @@ export default function PortfolioPage() {
             </div>
             <div className="divide-y divide-white/5">
               {holdings.map((h) => (
-                <Link key={h.tokenId} href={`/token/${h.tokenId}`}>
-                  <div className="flex items-center justify-between px-5 py-3 hover:bg-white/2 transition-colors cursor-pointer">
-                    <div>
-                      <div className="text-white font-semibold text-sm">{h.name}</div>
-                      <div className="text-orange-400 font-mono text-xs">${h.symbol}</div>
-                    </div>
-                    <div className="text-white font-mono text-sm">{h.balance.toFixed(2)} {h.symbol}</div>
+                <div key={h.tokenId} className="flex items-center justify-between px-5 py-3">
+                  <div className="flex items-center gap-3">
+                    <Link href={`/token/${h.tokenId}`} className="text-xs bg-green-500/10 text-green-400 px-2 py-1 rounded-lg font-semibold hover:bg-green-500/20 transition-colors">Buy</Link>
+                    <Link href={`/token/${h.tokenId}`} className="text-xs bg-red-500/10 text-red-400 px-2 py-1 rounded-lg font-semibold hover:bg-red-500/20 transition-colors">Sell</Link>
+                    <Link href={`/token/${h.tokenId}`}>
+                      <div>
+                        <div className="text-white font-semibold text-sm">{h.name}</div>
+                        <div className="text-orange-400 font-mono text-xs">${h.symbol}</div>
+                      </div>
+                    </Link>
                   </div>
-                </Link>
+                  <div className="text-white font-mono text-sm">{h.balance.toFixed(2)} {h.symbol}</div>
+                </div>
               ))}
             </div>
           </div>
@@ -402,9 +406,7 @@ export default function PortfolioPage() {
           </div>
         )}
       </div>
-      <Link href={`/token/${trade.tokenId}`} className="text-xs bg-green-500/10 text-green-400 px-2 py-1 rounded-lg font-semibold hover:bg-green-500/20 transition-colors whitespace-nowrap">Buy</Link>
-      <Link href={`/token/${trade.tokenId}`} className="text-xs bg-red-500/10 text-red-400 px-2 py-1 rounded-lg font-semibold hover:bg-red-500/20 transition-colors whitespace-nowrap">Sell</Link>
-    </div>
+      </div>
   </div>
 ))}
             </div>
