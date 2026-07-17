@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
       network: 'testnet2',
       deviceId: 'pumpmeme-payout-agent-v1',
     });
-    const { sphere } = await Sphere.init({ ...providers, mnemonic });
+    const { sphere } = await Sphere.init({ ...providers, mnemonic, network: 'testnet2' });
 
     const amount = String(Math.round(amountUCT * 1e18));
     const result = await sphere.payments.send({

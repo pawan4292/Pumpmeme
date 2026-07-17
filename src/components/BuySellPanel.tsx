@@ -216,7 +216,7 @@ export default function BuySellPanel({ token, onTrade }: BuySellPanelProps) {
         <div>
           <div className="flex justify-between text-xs text-white/40 mb-2">
             <span>Amount ({token.symbol})</span>
-            <span>{mode === 'sell' ? `You hold: ${holderBalance.toFixed(2)} ${token.symbol}` : `Token units to ${mode}`}</span>
+<span>You hold: {holderBalance.toFixed(2)} {token.symbol}</span>
           </div>
           <div className="relative">
             <input
