@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Trophy, TrendingUp, BarChart3 } from 'lucide-react';
-import Navigation from '@/components/Navigation';
+
 import LeaderboardTable from '@/components/LeaderboardTable';
 
 interface TokenLB {
@@ -90,7 +90,7 @@ export default function LeaderboardPage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
-      <Navigation />
+      
 
       {/* Hero */}
       <div className="relative pt-24 pb-10 overflow-hidden">

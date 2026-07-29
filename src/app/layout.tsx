@@ -35,7 +35,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           rel="stylesheet"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        
+        {children}
+      </body>
     </html>
   );
 }

@@ -4,7 +4,6 @@ import { useState, useEffect, use } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Users, TrendingUp, Clock, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
-import Navigation from '@/components/Navigation';
 import PriceChart from '@/components/PriceChart';
 import BuySellPanel from '@/components/BuySellPanel';
 import RiskBadge from '@/components/RiskBadge';
@@ -102,7 +101,7 @@ export default function TokenPage({ params }: TokenPageProps) {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#0a0a0a]">
-        <Navigation />
+        
         <div className="pt-24 max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 space-y-4">
@@ -119,7 +118,7 @@ export default function TokenPage({ params }: TokenPageProps) {
   if (!token) {
     return (
       <div className="min-h-screen bg-[#0a0a0a]">
-        <Navigation />
+     
         <div className="pt-32 text-center">
           <div className="text-4xl mb-4">🔍</div>
           <h2 className="text-white text-xl font-bold mb-2">Token not found</h2>
@@ -131,7 +130,7 @@ export default function TokenPage({ params }: TokenPageProps) {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
-      <Navigation />
+      
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16">
         {/* Back button */}

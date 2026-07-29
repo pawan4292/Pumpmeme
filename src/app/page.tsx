@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
 import { Search, TrendingUp, Clock, Zap, ArrowRight, Flame } from 'lucide-react';
-import Navigation from '@/components/Navigation';
 import TokenCard from '@/components/TokenCard';
 import Link from 'next/link';
 
@@ -110,7 +109,7 @@ export default function ExplorePage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
-      <Navigation />
+      
 
       {/* HERO */}
       <div

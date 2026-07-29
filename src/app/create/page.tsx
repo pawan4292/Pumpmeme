@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Rocket, Upload, CheckCircle, Loader2, AlertCircle, ArrowRight } from 'lucide-react';
-import Navigation from '@/components/Navigation';
+
 import CreationFeeNotice from '@/components/CreationFeeNotice';
 import {
   isWalletConnected,
@@ -109,7 +109,7 @@ export default function CreatePage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
-      <Navigation />
+     
 
       {/* Hero */}
       <div className="relative pt-32 pb-16 overflow-hidden">

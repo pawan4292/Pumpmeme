@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bot, Activity, RefreshCw, Zap, Shield, Clock } from 'lucide-react';
-import Navigation from '@/components/Navigation';
 import ActivityFeedItem from '@/components/ActivityFeedItem';
 
 interface ActivityEntry {
@@ -72,7 +71,7 @@ export default function AgentActivityPage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
-      <Navigation />
+     
 
       {/* Hero */}
       <div className="relative pt-24 pb-10 overflow-hidden">

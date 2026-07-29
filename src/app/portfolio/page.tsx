@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Wallet, TrendingUp, Package, History, RefreshCw, ExternalLink } from 'lucide-react';
-import Navigation from '@/components/Navigation';
+
 import Link from 'next/link';
 import {
   isWalletConnected,
@@ -155,7 +155,7 @@ export default function PortfolioPage() {
   if (!connected) {
     return (
       <div className="min-h-screen bg-[#0a0a0a]">
-        <Navigation />
+       
         <div className="pt-32 flex items-center justify-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -188,7 +188,7 @@ export default function PortfolioPage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
-      <Navigation />
+      
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16">
         {/* Header */}
