@@ -120,7 +120,7 @@ async function executeGraduationTransfer(token: Awaited<ReturnType<typeof getTok
   const { createWalletApiProviders } = await import('@unicitylabs/sphere-sdk/impl/shared/wallet-api');
 
   const base = createNodeProviders({
-    network: 'testnet',
+    network: 'testnet2',
     dataDir: '/tmp/agent-wallet',
     oracle: { apiKey: process.env.SPHERE_ORACLE_API_KEY ?? 'sk_ddc3cfcc001e4a28ac3fad7407f99590' },
   });
