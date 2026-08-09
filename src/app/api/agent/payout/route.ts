@@ -23,7 +23,6 @@ export async function POST(req: NextRequest) {
     const base = createNodeProviders({
       network: 'testnet',
       dataDir: '/tmp/agent-wallet',
-      tokensDir: '/tmp/agent-tokens',
       oracle: { apiKey: process.env.SPHERE_ORACLE_API_KEY ?? '' },
     });
     const providers = createWalletApiProviders(base, {
