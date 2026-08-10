@@ -216,3 +216,15 @@ export async function getLastAgentRun(agentName: string): Promise<Date | null> {
     .limit(1);
   return entry?.timestamp ?? null;
 }
+export async function tryAcquireLock(lockName: string, ttlSeconds = 120): Promise<boolean> {
+  const cutoff = new Date(Date.now() - ttlSeconds * 1000);
+  const [existing] = await db
+    .select()
+    .from(activityLog)
+    .where(and(eq(activityLog.agentName, lockName), gte(activityLog.timestamp, cutoff)))
+    .orderBy(desc(activityLog.timestamp))
+    .limit(1);
+  if (existing) return false;
+  await db.insert(activityLog).values({ agentName: lockName, action: 'lock_acquired', detail: 'run in progress' });
+  return true;
+}

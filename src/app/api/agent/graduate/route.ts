@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAllTokens, getToken, graduateToken, logActivity } from '@/lib/db';
+import { getAllTokens, getToken, graduateToken, logActivity, tryAcquireLock } from '@/lib/db';
 import { marketCap } from '@/lib/curve';
 import { GRADUATION_THRESHOLD_UCT } from '@/lib/constants';
 
@@ -15,6 +15,11 @@ export async function POST(req: NextRequest) {
     cronSecret !== process.env.CRON_SECRET
   ) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const gotLock = await tryAcquireLock('graduation-agent-lock', 120);
+  if (!gotLock) {
+    return NextResponse.json({ skipped: true, reason: 'Another run in progress' });
   }
 
   try {
