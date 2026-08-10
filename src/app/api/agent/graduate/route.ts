@@ -31,6 +31,7 @@ export async function POST(req: NextRequest) {
       checked.push(token.id);
 
       if (mc >= GRADUATION_THRESHOLD_UCT) {
+        await new Promise((r) => setTimeout(r, 1500));
         // Token has crossed graduation threshold
         // Execute real liquidity migration via Sphere SDK (server-side Node wallet)
         let graduationTxId: string | null = null;
