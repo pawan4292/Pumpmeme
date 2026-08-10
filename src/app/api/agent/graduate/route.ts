@@ -134,6 +134,7 @@ async function executeGraduationTransfer(token: Awaited<ReturnType<typeof getTok
   const { sphere } = await Sphere.init({
     ...providers,
     mnemonic,
+    network: 'testnet2',
   });
 
   // DEX/liquidity pool address (graduation target)
