@@ -24,24 +24,25 @@ export async function GET(req: NextRequest) {
     }
 
     // Enrich with latest price info from trades
-    const enriched = await Promise.all(
-      tokenList.map(async (token) => {
-        const recentTrades = await getTradesForToken(token.id, 1);
-        const latestPrice =
-          recentTrades.length > 0 ? parseFloat(recentTrades[0].price) : 0;
-        const supply = parseFloat(token.supply);
-        const mc = marketCap(supply);
-        const volume24h = await get24hVolume(token.id);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const enriched: any[] = [];
 
-        return {
-          ...token,
-          latestPrice,
-          marketCap: mc,
-          volume24h,
-          graduationProgress: Math.min(100, (mc / GRADUATION_THRESHOLD_UCT) * 100),
-        };
-      })
-    );
+    for (const token of tokenList) {
+      const recentTrades = await getTradesForToken(token.id, 1);
+      const latestPrice =
+        recentTrades.length > 0 ? parseFloat(recentTrades[0].price) : 0;
+      const supply = parseFloat(token.supply);
+      const mc = marketCap(supply);
+      const volume24h = await get24hVolume(token.id);
+
+      enriched.push({
+        ...token,
+        latestPrice,
+        marketCap: mc,
+        volume24h,
+        graduationProgress: Math.min(100, (mc / GRADUATION_THRESHOLD_UCT) * 100),
+      });
+    }
 
     return NextResponse.json({ tokens: enriched });
   } catch (err) {
