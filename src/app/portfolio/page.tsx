@@ -74,9 +74,13 @@ export default function PortfolioPage() {
         );
         setCreatedTokens(created);
 
-        // Get trades for this trader across all tokens
+        // Get trades for this trader across all tokens (parallel, but capped concurrency)
         const trades: (TradeFromDB & { tokenSymbol?: string })[] = [];
-        for (const token of allTokens.slice(0, 20)) {
+        const tokensToCheck = allTokens.slice(0, 20);
+        const BATCH_SIZE = 5;
+        for (let i = 0; i < tokensToCheck.length; i += BATCH_SIZE) {
+          const batch = tokensToCheck.slice(i, i + BATCH_SIZE);
+          await Promise.all(batch.map(async (token) => {
           try {
             const tradeRes = await fetch(`/api/tokens/${token.id}`);
             if (tradeRes.ok) {
@@ -89,6 +93,7 @@ export default function PortfolioPage() {
           } catch {
             // skip this token if fetch fails, don't kill the whole portfolio load
           }
+          }));
         }
         trades.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
         setMyTrades(trades.slice(0, 50));
