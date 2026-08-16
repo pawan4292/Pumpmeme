@@ -126,15 +126,15 @@ export default function PortfolioPage() {
   };
 
   useEffect(() => {
+    let lastConnected = false;
     const checkWallet = () => {
       const c = isWalletConnected();
       setConnected(c);
-      if (c) loadPortfolio();
+      if (c && !lastConnected) loadPortfolio();
+      lastConnected = c;
     };
     checkWallet();
-    const interval = setInterval(() => {
-      if (!isWalletConnected()) setConnected(false);
-    }, 3000);
+    const interval = setInterval(checkWallet, 1000);
     return () => clearInterval(interval);
   }, []);
 
