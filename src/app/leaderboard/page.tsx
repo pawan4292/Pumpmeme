@@ -40,24 +40,24 @@ export default function LeaderboardPage() {
           const data = await res.json();
           const tokenList: TokenLB[] = data.tokens ?? [];
 
-          // Fetch 24h change and volume for each token
-          const enriched = await Promise.all(
-            tokenList.map(async (t) => {
-              try {
-                const detail = await fetch(`/api/tokens/${t.id}`);
-                if (detail.ok) {
-                  const d = await detail.json();
-                  return {
-                    ...t,
-                    priceChange24h: d.token?.priceChange24h ?? null,
-                    volume24h: d.token?.volume24h ?? 0,
-                    marketCap: d.token?.marketCap ?? t.marketCap ?? 0,
-                  };
-                }
-              } catch { /* ignore */ }
-              return { ...t, priceChange24h: null, volume24h: 0 };
-            })
-          );
+          // Fetch 24h change and volume for each token (sequential to avoid overload)
+          const enriched: TokenLB[] = [];
+          for (const t of tokenList) {
+            try {
+              const detail = await fetch(`/api/tokens/${t.id}`);
+              if (detail.ok) {
+                const d = await detail.json();
+                enriched.push({
+                  ...t,
+                  priceChange24h: d.token?.priceChange24h ?? null,
+                  volume24h: d.token?.volume24h ?? 0,
+                  marketCap: d.token?.marketCap ?? t.marketCap ?? 0,
+                });
+                continue;
+              }
+            } catch { /* ignore */ }
+            enriched.push({ ...t, priceChange24h: null, volume24h: 0 });
+          }
           setTokens(enriched);
 
           // Build creator stats from real DB data

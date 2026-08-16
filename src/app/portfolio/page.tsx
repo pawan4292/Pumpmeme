@@ -77,33 +77,40 @@ export default function PortfolioPage() {
         // Get trades for this trader across all tokens
         const trades: (TradeFromDB & { tokenSymbol?: string })[] = [];
         for (const token of allTokens.slice(0, 20)) {
-          const tradeRes = await fetch(`/api/tokens/${token.id}`);
-          if (tradeRes.ok) {
-            const tokenData = await tradeRes.json();
-            const tokenTrades: TradeFromDB[] = (tokenData.trades ?? [])
-              .filter((t: { traderPubkey: string }) => t.traderPubkey === identity.chainPubkey)
-              .map((t: TradeFromDB) => ({ ...t, tokenSymbol: token.symbol }));
-            trades.push(...tokenTrades);
+          try {
+            const tradeRes = await fetch(`/api/tokens/${token.id}`);
+            if (tradeRes.ok) {
+              const tokenData = await tradeRes.json();
+              const tokenTrades: TradeFromDB[] = (tokenData.trades ?? [])
+                .filter((t: { traderPubkey: string }) => t.traderPubkey === identity.chainPubkey)
+                .map((t: TradeFromDB) => ({ ...t, tokenSymbol: token.symbol }));
+              trades.push(...tokenTrades);
+            }
+          } catch {
+            // skip this token if fetch fails, don't kill the whole portfolio load
           }
         }
         trades.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
         setMyTrades(trades.slice(0, 50));
 
-        // Build holdings: unique tokens traded, fetch live balance for each
+        // Build holdings: unique tokens traded, fetch live balance for each (sequential to avoid overload)
         const uniqueTokenIds = [...new Set(trades.map((t) => t.tokenId))];
-        const holdingsData = await Promise.all(
-          uniqueTokenIds.map(async (tokenId) => {
+        const holdingsData: { tokenId: number; symbol: string; name: string; balance: number }[] = [];
+        for (const tokenId of uniqueTokenIds) {
+          try {
             const tokenMeta = allTokens.find((t) => t.id === tokenId);
             const balRes = await fetch(`/api/tokens/${tokenId}/balance?pubkey=${identity.chainPubkey}`);
             const balData = balRes.ok ? await balRes.json() : { balance: 0 };
-            return {
+            holdingsData.push({
               tokenId,
               symbol: tokenMeta?.symbol ?? '???',
               name: tokenMeta?.name ?? 'Unknown',
               balance: balData.balance ?? 0,
-            };
-          })
-        );
+            });
+          } catch {
+            // skip on failure
+          }
+        }
         setHoldings(holdingsData.filter((h) => h.balance > 0));
       }
     } catch (err) {
